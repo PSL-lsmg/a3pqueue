@@ -64,8 +64,6 @@ public:
     
     // Let's feel free to add other private helper methods to our Priority Queue class.
     
-    int getSize() const;
-    
     bool dequeueAll();
     
     void printQueue();
@@ -88,7 +86,7 @@ PriorityQueue<ElementType>::PriorityQueue()
 template <class ElementType>
 int PriorityQueue<ElementType>::getElementCount() const
 {
-    return getElementCount();
+    return numOfEle;
 }
 
 // Description: Returns "true" is this Priority Queue is empty, otherwise "false".
@@ -143,13 +141,6 @@ ElementType PriorityQueue<ElementType>::peek() const throw(class EmptyDataCollec
     
     return array[front];
 }
-
-template <class ElementType>
-int PriorityQueue<ElementType>::getSize() const
-{
-    return numOfEle;
-}
-
 
 template <class ElementType>
 bool PriorityQueue<ElementType>::dequeueAll()

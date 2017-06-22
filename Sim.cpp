@@ -40,5 +40,15 @@ int main()
 	cout << q.peek() << endl;
 	cout << "size: " << q.getElementCount() << endl;
 
+	q.dequeue();
+	try
+	{
+		q.peek();
+	}
+	catch(EmptyDataCollectionException& e)
+	{
+		cout << e.what() << endl;
+	}
+
 	cout << "end" << endl;
 }

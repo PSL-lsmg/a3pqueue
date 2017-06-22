@@ -142,7 +142,7 @@ bool Queue<ElementType>::dequeue()
 // Exceptions: Throws EmptyDataCollectionException if this Queue is empty.
 // Time Efficiency: O(1)
 template <class ElementType>
-ElementType Queue<ElementType>::peek() const throw (class EmptyDataCollectionException)
+ElementType Queue<ElementType>::peek() const throw (EmptyDataCollectionException)
 {
     if (numOfEle == 0) {
         throw EmptyDataCollectionException("Queue is empty");
