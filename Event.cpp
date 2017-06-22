@@ -30,6 +30,7 @@ Event::Event(string aType)
 	type = aType;
 }
 
+
 void Event::setTime(int t)
 {
 	time = t;

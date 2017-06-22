@@ -10,14 +10,32 @@
 
 using namespace std;
 
-Queue::Queue()
+template <class ElementType>
+Queue<ElementType>::Queue()
 {
 	numOfEle = 0;
 	front = -1;
 	back = -1;
 }
 
-void Queue::enqueue(const Event& e)
+template <class ElementType>
+int Queue<ElementType>::getElementCount() const
+{
+    return getElementCount();
+}
+
+template <class ElementType>
+bool Queue<ElementType>::isEmpty() const
+{
+    return (numOfEle == 0);
+}
+
+// Description: Adds newElement to the "back" of this Queue
+//              (not necessarily the "back" of its data structure) and
+//              returns "true" if successful, otherwise "false".
+// Time Efficiency: O(1)
+template <class ElementType>
+bool Queue<ElementType>::enqueue(const ElementType& e)
 {
 	if(numOfEle == 0)
 	{
@@ -30,9 +48,11 @@ void Queue::enqueue(const Event& e)
 	}
 	array[back] = e;
 	numOfEle++;
+    return true;
 }
 
-bool Queue::dequeue()
+template <class ElementType>
+bool Queue<ElementType>::dequeue()
 {
 	if(numOfEle == 0)
 	{
@@ -43,23 +63,26 @@ bool Queue::dequeue()
 	return true;
 }
 
-bool Queue::isEmpty() const
+// need to figure out how to use exception???
+template <class ElementType>
+ElementType Queue<ElementType>::peek() const throw (class EmptyDataCollectionException)
 {
-	return (numOfEle == 0);
+    if (numOfEle == 0) {
+        throw EmptyDataCollectionException;
+    }
+    return array[front];
 }
 
-int Queue::getSize() const
+
+template <class ElementType>
+int Queue<ElementType>::getSize() const
 {
 	return numOfEle;
 }
 
-Event Queue::peek() const //throw (EmptyQueueException);
-{
 
-	return array[front];
-}
-
-bool Queue::dequeueAll()
+template <class ElementType>
+bool Queue<ElementType>::dequeueAll()
 {
 	if(numOfEle == 0)
 	{
@@ -69,7 +92,8 @@ bool Queue::dequeueAll()
 	return true;
 }
 
-void Queue::printQueue()
+template <class ElementType>
+void Queue<ElementType>::printQueue()
 {
 	cout << "****" << endl;
 	for(int i = front; i <= back; i++)

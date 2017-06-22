@@ -19,7 +19,7 @@ int main()
 	Event d("D");
 	d.setTime(a.getTime() + a.getLength());
 
-	Queue q;
+	ElementType q;
 	q.enqueue(a);
 	q.enqueue(d);
 	q.printQueue();
