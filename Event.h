@@ -20,8 +20,9 @@ public:
 	void setType(string type);
 	void setTime(int time);
 	void setLength(int length);
-	string getType();
-	int getTime();
-	int getLength();
+	string getType() const;
+	int getTime() const;
+	int getLength() const;
+	friend ostream& operator<< (ostream& os, const Event& e);
 
 };

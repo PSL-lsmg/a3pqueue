@@ -45,17 +45,23 @@ void Event::setType(string t)
 	type = t;
 }
 
-int Event::getTime()
+int Event::getTime() const
 {
 	return time;
 }
 
-int Event::getLength()
+int Event::getLength() const
 {
 	return length;
 }
 
-string Event::getType()
+string Event::getType() const
 {
 	return type;
+}
+
+ostream& operator<< (ostream& os, const Event& e)
+{
+	os << e.getType() << "/" << e.getTime() << "/" << e.getLength();
+	return os;
 }
