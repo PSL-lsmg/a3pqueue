@@ -7,6 +7,7 @@
 #include "Queue.h"
 #include <string>
 #include <iostream>
+#include "PriorityQueue.h"
 
 int main()
 {
@@ -19,7 +20,7 @@ int main()
 	Event d("D");
 	d.setTime(a.getTime() + a.getLength());
 
-	ElementType q;
+	Queue <Event> q;
 	q.enqueue(a);
 	q.enqueue(d);
 	q.printQueue();
@@ -37,6 +38,7 @@ int main()
 	}
 
 	cout << q.peek() << endl;
+	cout << "size: " << q.getElementCount() << endl;
 
 	cout << "end" << endl;
 }
