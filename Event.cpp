@@ -43,7 +43,8 @@ void Event::setLength(int l)
 
 void Event::setType(string t)
 {
-	type = t;
+    // check that input is either A or D
+    type = t;
 }
 
 int Event::getTime() const

@@ -1,13 +1,14 @@
 /*
-* Queue.h
-*
-*/
+ * Queue.h
+ *
+ */
 
 #pragma once
 #include <stdexcept>
 #include <string>
 #include "Event.h"
 #include "EmptyDataCollectionException.h"
+#include "Node.cpp"
 #include <iostream>
 using namespace std;
 #define SIZE 100
@@ -19,10 +20,11 @@ class Queue {
 private:
     
     // We must complete this section.
-    Event array[SIZE];
-    int numOfEle;
-    int front;
-    int back;
+    int numOfEle; // Num of elements in Queue
+//    int front;
+//    int back;
+    Node *head; // Pointer to first node in queue
+    Node *tail; // Pointer to last node in queue
     //string EmptyDataCollectionException = "Exception: The queue is empty.";
     
 public:
@@ -64,7 +66,7 @@ public:
     /******* Public Interface - END - *******/
     
     // Let's feel free to add other private helper methods to our Queue class.
-
+    
     
     bool dequeueAll();
     
@@ -76,9 +78,9 @@ public:
 template <class ElementType>
 Queue<ElementType>::Queue()
 {
-	numOfEle = 0;
-	front = -1;
-	back = -1;
+    numOfEle = 0;
+    head = NULL;
+    tail = NULL;
 }
 
 // Description: Returns the number of elements in the Queue.
@@ -105,17 +107,26 @@ bool Queue<ElementType>::isEmpty() const
 template <class ElementType>
 bool Queue<ElementType>::enqueue(const ElementType& e)
 {
-	if(numOfEle == 0)
-	{
-		front = 0;
-		back = 0;
-	}
-	else
-	{
-		back++;
-	}
-	array[back] = e;
-	numOfEle++;
+    
+    //add false condition
+    
+    //inserts node @ end
+    Node* newNode = new Node(e);
+    if(head == NULL)
+    {
+        // If no elements, insert node at beginning of linked list
+        head = newNode;
+    }
+    else
+    {
+        Node* current = head; //anchor head
+        while (current -> next != NULL){
+            current = current -> next;
+        }
+        current -> next = newNode;
+        tail = newNode;
+    }
+    numOfEle++;
     return true;
 }
 
@@ -127,13 +138,20 @@ bool Queue<ElementType>::enqueue(const ElementType& e)
 template <class ElementType>
 bool Queue<ElementType>::dequeue()
 {
-	if(numOfEle == 0)
-	{
-		return false;
-	}
-	front++;
-	numOfEle--;
-	return true;
+    //deletes node @ front
+    
+    if (head != NULL){
+        Node *nodeToDelete = head; //Anchor head
+        head = head -> next;
+        nodeToDelete -> next = NULL;
+        delete nodeToDelete;
+        nodeToDelete = NULL;
+    }
+    else {
+        return false;
+    }
+    numOfEle--;
+    return true;
 }
 
 // Description: Returns (a copy of) the element located at the "front" of this Queue.
@@ -144,31 +162,43 @@ bool Queue<ElementType>::dequeue()
 template <class ElementType>
 ElementType Queue<ElementType>::peek() const throw (EmptyDataCollectionException)
 {
-    if (numOfEle == 0) {
+    if (head == NULL) {
         throw EmptyDataCollectionException("Queue is empty");
     }
-    return array[front];
+    return head->data;
 }
 
 
 template <class ElementType>
 bool Queue<ElementType>::dequeueAll()
 {
-	if(numOfEle == 0)
-	{
-		return false;
-	}
-	numOfEle = 0;
-	return true;
+    if(numOfEle == 0)
+    {
+        return false;
+    }
+    while (head != NULL){
+        Node *nodeToDelete = head; //Anchor head
+        head = head -> next;
+        // Not sure if we need this in order to get it to traverse, otherwise it will stop after the first deleted node
+//        nodeToDelete -> next = NULL;
+        delete nodeToDelete;
+        nodeToDelete = NULL;
+    }
+    
+    numOfEle = 0;
+    return true;
 }
 
 template <class ElementType>
 void Queue<ElementType>::printQueue()
 {
-	cout << "****" << endl;
-	for(int i = front; i <= back; i++)
-	{
-		cout << array[i] << endl;
-	}
-	cout << "****" << endl;
+    cout << "****" << endl;
+    Node *current = head;
+    for (int i = 0; i < numOfEle; i++) {
+        cout << current->data << endl;
+        current = current->next;
+    }
+    delete current;
+    current = NULL;
+    cout << "****" << endl;
 }

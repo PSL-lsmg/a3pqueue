@@ -5,6 +5,7 @@
 */
 #include "Event.h"
 #include "Queue.h"
+#include "Node.h"
 #include <string>
 #include <iostream>
 #include "PriorityQueue.h"
