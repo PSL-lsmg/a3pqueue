@@ -8,7 +8,7 @@
 #include <string>
 #include "Event.h"
 #include "EmptyDataCollectionException.h"
-#include "Node.cpp"
+#include "Node.h"
 #include <iostream>
 using namespace std;
 #define SIZE 100
@@ -119,13 +119,14 @@ bool Queue<ElementType>::enqueue(const ElementType& e)
     }
     else
     {
-        Node* current = head; //anchor head
-        while (current -> next != NULL){
-            current = current -> next;
-        }
-        current -> next = newNode;
-        tail = newNode;
+//        Node* current = head; //anchor head
+//        while (current -> next != NULL){
+//            current = current -> next;
+//        }
+//        current -> next = newNode;
+        tail -> next = newNode;
     }
+    tail = newNode;
     numOfEle++;
     return true;
 }
@@ -139,16 +140,16 @@ template <class ElementType>
 bool Queue<ElementType>::dequeue()
 {
     //deletes node @ front
-    
-    if (head != NULL){
-        Node *nodeToDelete = head; //Anchor head
+    Node *nodeToDelete = new Node;
+    if (head == NULL){
+        return false;
+    }
+    else {
+        nodeToDelete = head;
         head = head -> next;
         nodeToDelete -> next = NULL;
         delete nodeToDelete;
         nodeToDelete = NULL;
-    }
-    else {
-        return false;
     }
     numOfEle--;
     return true;
@@ -177,7 +178,8 @@ bool Queue<ElementType>::dequeueAll()
         return false;
     }
     while (head != NULL){
-        Node *nodeToDelete = head; //Anchor head
+        Node *nodeToDelete = new Node;
+        nodeToDelete = head; //Anchor head
         head = head -> next;
         // Not sure if we need this in order to get it to traverse, otherwise it will stop after the first deleted node
 //        nodeToDelete -> next = NULL;
@@ -193,10 +195,11 @@ template <class ElementType>
 void Queue<ElementType>::printQueue()
 {
     cout << "****" << endl;
-    Node *current = head;
-    for (int i = 0; i < numOfEle; i++) {
-        cout << current->data << endl;
-        current = current->next;
+    Node *current = new Node;
+    current = head;
+    while (current != NULL) {
+        cout << current -> data << endl;
+        current = current -> next;
     }
     delete current;
     current = NULL;
