@@ -22,7 +22,8 @@ private:
     int numOfEle;
     int front;
     int back;
-    void enqueueBackAtEnd(const ElementType& newElement);
+    void enqueueFrontGEBack(const ElementType& newElement); //enqueue when front is great/equal to back
+    void enqueueFrontLTBack(const ElementType& newElement); //enqueue when front is less than back
     
 public:
     
@@ -119,112 +120,19 @@ bool PriorityQueue<ElementType>::enqueue(const ElementType& newElement)
     }
     else
     { 
-        if(back == SIZE-1) //set back to the beginning of array when it is at the end
+        if(back == SIZE-1)
         {
-            // int position = front;
-            // //front is always less than back
-            // for(int i = back; i >= front; i--)
-            // {   
-            //     cout << "checking " << newElement.getTime() << endl;
-            //     if(array[i].getTime() > newElement.getTime())   //might need to overload > for Event
-            //     {
-            //         cout << array[i].getTime() << ">" << newElement.getTime() << endl;
-            //         position = i+1;
-            //         break;
-            //     }
-            // }
-            // cout << "Element time: " << newElement.getTime() << " -- " << position << endl;
-            // //shift to the right
-            // back = 0;
-            // array[back] = array[SIZE-1];
-            // for(int j = back; j > position; j--)
-            // {
-            //     array[j] = array[j-1];
-            // }
-            // array[position] = newElement;
-            enqueueBackAtEnd(newElement);
+            enqueueFrontGEBack(newElement);
         }
         else
         {
-            //find the optimal position to place the new element and shift to right [F>=B]
-            int position = front;
             if(front <= back)
             {
-                for(int i = back; i >= front; i--)
-                {   
-                    cout << "checking " << newElement.getTime() << endl;
-                    if(array[i].getTime() > newElement.getTime())   //might need to overload > for Event
-                    {
-                        cout << array[i].getTime() << ">" << newElement.getTime() << endl;
-                        position = i+1;
-                        break;
-                    }
-                }
-                //shift to the right
-                back++;
-                for(int j = back; j > position; j--)
-                {
-                    array[j] = array[j-1];
-                }
-                array[position] = newElement;
-                cout << "Element time: " << newElement.getTime() << " -- " << position << endl;
+                enqueueFrontGEBack(newElement);
             }
             else
             {
-                //find the optimal position to place the new element and shift to right [F<B]
-                bool found = false;
-                for(int i = back; i >= 0; i--)
-                {
-                    cout << "checking " << newElement.getTime() << endl;
-                    if(array[i].getTime() > newElement.getTime())
-                    {
-                        cout << array[i].getTime() << ">" << newElement.getTime() << endl;
-                        position = i+1;
-                        found = true;
-                        break;
-                    }
-                }
-                for(int j = SIZE-1; j >= front && found == false; j--)
-                {
-                    cout << "checking " << newElement.getTime() << endl;
-                    if(array[j].getTime() > newElement.getTime())
-                    {
-                        cout << array[j].getTime() << ">" << newElement.getTime() << endl;
-                        if(j == SIZE-1)
-                        {
-                            position = 0;
-                        }
-                        else
-                        {
-                            position = j+1;
-                        }
-                        break;
-                    }
-                }
-                 cout << "Element time: " << newElement.getTime() << " -- " << position << endl;
-                //shift the elements
-                back++;
-                if(position < back)
-                {
-                    for(int j = back; j > position; j--)
-                    {
-                        array[j] = array[j-1];
-                    }
-                }
-                else
-                {
-                    for(int j = back; j > 0; j--)
-                    {
-                        array[j] = array[j-1];
-                    }
-                    array[0] = array[SIZE-1];
-                    for(int k = SIZE-1; k > position; k--)
-                    {
-                        array[k] = array[k-1];
-                    }
-                }
-                array[position]= newElement;
-                
+                enqueueFrontLTBack(newElement);
             }
         }
     }
@@ -244,6 +152,10 @@ bool PriorityQueue<ElementType>::dequeue()
         return false;
     }
     front++;
+    if(front == SIZE)
+    {
+        front = 0;
+    }
     numOfEle--;
     return true;
     // if elements are sorted upon insert, they can just be dequeued in order here
@@ -306,27 +218,84 @@ void PriorityQueue<ElementType>::printQueue()
 }
 
 template <class ElementType>
-void PriorityQueue<ElementType>::enqueueBackAtEnd(const ElementType& newElement)
+void PriorityQueue<ElementType>::enqueueFrontGEBack(const ElementType& newElement)
 {
     int position = front;
-    //front is always less than back
     for(int i = back; i >= front; i--)
     {   
-        cout << "checking " << newElement.getTime() << endl;
-        if(array[i].getTime() > newElement.getTime())   //might need to overload > for Event
+        if(array[i] > newElement)   //might need to overload > for Event
         {
-            cout << array[i].getTime() << ">" << newElement.getTime() << endl;
             position = i+1;
             break;
         }
     }
-    cout << "Element time: " << newElement.getTime() << " -- " << position << endl;
+    //set new back position depending on where the current back position is
+    if(back == SIZE-1)
+    {
+        back = 0;
+        array[back] = array[SIZE-1];
+    }
+    else
+    {
+        back++;
+    }
     //shift to the right
-    back = 0;
-    array[back] = array[SIZE-1];
     for(int j = back; j > position; j--)
     {
         array[j] = array[j-1];
     }
-    array[position] = newElement;    
+    array[position] = newElement;
+}
+
+template <class ElementType>
+void PriorityQueue<ElementType>::enqueueFrontLTBack(const ElementType& newElement)
+{
+    int position = front;
+    bool found = false;
+    for(int i = back; i >= 0; i--)
+    {
+        if(array[i] > newElement)
+        {
+            position = i+1;
+            found = true;
+            break;
+        }
+    }
+    for(int j = SIZE-1; j >= front && found == false; j--)
+    {
+        if(array[j] > newElement)
+        {
+            if(j == SIZE-1)
+            {
+                position = 0;
+            }
+            else
+            {
+                position = j+1;
+            }
+            break;
+        }
+    }
+    //shift the elements
+    back++;
+    if(position < back)
+    {
+        for(int j = back; j > position; j--)
+        {
+            array[j] = array[j-1];
+        }
+    }
+    else
+    {
+        for(int j = back; j > 0; j--)
+        {
+            array[j] = array[j-1];
+        }
+        array[0] = array[SIZE-1];
+        for(int k = SIZE-1; k > position; k--)
+        {
+            array[k] = array[k-1];
+        }
+    }
+    array[position]= newElement;
 }
