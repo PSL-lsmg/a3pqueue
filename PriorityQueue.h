@@ -18,11 +18,10 @@ class PriorityQueue {
 private:
     
     // We must complete this section.
-    Event array[SIZE];
+    ElementType array[SIZE];
     int numOfEle;
     int front;
     int back;
-//    string EmptyDataCollectionException = "Exception: The queue is empty.";
     
 public:
     
@@ -63,7 +62,6 @@ public:
     /******* Public Interface - END - *******/
     
     // Let's feel free to add other private helper methods to our Priority Queue class.
-    
     bool dequeueAll();
     
     void printQueue();
@@ -105,9 +103,99 @@ bool PriorityQueue<ElementType>::isEmpty() const
 template <class ElementType>
 bool PriorityQueue<ElementType>::enqueue(const ElementType& newElement)
 {
-    //sort while entering?
-    // arrival first, depature second if given same time
-    
+    //check if queue is full
+    if(numOfEle == SIZE)
+    {
+        return false;
+    }
+
+    //initial
+    if(front == -1 && back == -1)
+    {
+        front++;
+        back++;
+        array[back] = newElement;
+    }
+    else
+    { 
+        if(back == SIZE-1) //set back to the beginning of array when it is at the end
+        {
+
+
+            back = 0;
+        }
+        else
+        {
+            //find the optimal position to place the new element and shift to right [F>=B]
+            int position = back;
+            if(front <= back)
+            {
+                for(int i = back; i >= front; i--)
+                {   
+                    if(array[i].getTime() > newElement.getTime())   //might need to overload > for Event
+                    {
+                        position = i+1;
+                        break;
+                    }
+                }
+                //shift to the right
+                back++;
+                for(int j = back; j > position; j--)
+                {
+                    array[j] = array[j-1];
+                }
+                array[position] = newElement;
+            }
+            else
+            {
+                //find the optimal position to place the new element and shift to right [F<B]
+                bool found = false;
+                for(int i = back; i >= 0; i--)
+                {
+                    if(array[i].getTime() > newElement.getTime())
+                    {
+                        position = i+1;
+                        found = true;
+                        break;
+                    }
+                }
+                for(int j = SIZE-1; j >= front && found == false; j--)
+                {
+                    if(array[i].getTime() > newElement.getTime())
+                    {
+                        position = i+1;
+                        break;
+                    }
+                }
+                //shift the elements
+                back++;
+                if(position < back)
+                {
+                    for(int j = back; j > position; j--)
+                    {
+                        array[j] = array[j-1];
+                    }
+                }
+                else
+                {
+                    for(int j = back; j > 0; j--)
+                    {
+                        array[j] = array[j-1];
+                    }
+                    array[0] = array[SIZE-1];
+                    for(int k = SIZE-1; k > position; k--)
+                    {
+                        array[k] = array[k-1];
+                    }
+                }
+                array[position]= newElement;
+                
+            }
+        }
+    }
+
+    numOfEle++;
+    return true;
 }
 
 // Description: Removes the element with the "highest" priority.
@@ -156,10 +244,14 @@ bool PriorityQueue<ElementType>::dequeueAll()
 template <class ElementType>
 void PriorityQueue<ElementType>::printQueue()
 {
-    cout << "****" << endl;
-    for(int i = front; i <= back; i++)
+    if(front > -1 && back > -1)
     {
-        cout << array[i] << endl;
+        cout << "****" << endl;
+        for(int i = front; i <= back; i++)
+        {
+            cout << array[i] << endl;
+        }
+        cout << "****" << endl;
     }
-    cout << "****" << endl;
+
 }
