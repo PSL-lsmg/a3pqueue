@@ -5,7 +5,6 @@
 */
 #include "Event.h"
 #include "Queue.h"
-#include "Node.h"
 #include <string>
 #include <iostream>
 #include "PriorityQueue.h"
@@ -21,35 +20,35 @@ int main()
 	Event d("D");
 	d.setTime(a.getTime() + a.getLength());
 
-	Queue <Event> q;
+	Queue<Event> q;
 	q.enqueue(a);
 	q.enqueue(d);
 	q.printQueue();
 
-	q.dequeue();
-	q.printQueue();
+	// q.dequeue();
+	// q.printQueue();
 
-	if(q.isEmpty())
-	{
-		cout << "Empty" << endl;
-	}
-	else
-	{
-		cout << "Not empty" << endl;
-	}
+	// if(q.isEmpty())
+	// {
+	// 	cout << "Empty" << endl;
+	// }
+	// else
+	// {
+	// 	cout << "Not empty" << endl;
+	// }
 
-	cout << q.peek() << endl;
-	cout << "size: " << q.getElementCount() << endl;
+	// cout << q.peek() << endl;
+	// cout << "size: " << q.getElementCount() << endl;
 
-	q.dequeue();
-	try
-	{
-		q.peek();
-	}
-	catch(EmptyDataCollectionException& e)
-	{
-		cout << e.what() << endl;
-	}
+	// q.dequeue();
+	// try
+	// {
+	// 	q.peek();
+	// }
+	// catch(EmptyDataCollectionException& e)
+	// {
+	// 	cout << e.what() << endl;
+	// }
 
-	cout << "end" << endl;
+	// cout << "end" << endl;
 }

@@ -11,7 +11,6 @@
 #include "Node.h"
 #include <iostream>
 using namespace std;
-#define SIZE 100
 
 
 template <class ElementType>
@@ -23,8 +22,8 @@ private:
     int numOfEle; // Num of elements in Queue
 //    int front;
 //    int back;
-    Node *head; // Pointer to first node in queue
-    Node *tail; // Pointer to last node in queue
+    Node<ElementType> *head; // Pointer to first node in queue
+    Node<ElementType> *tail; // Pointer to last node in queue
     //string EmptyDataCollectionException = "Exception: The queue is empty.";
     
 public:
@@ -111,7 +110,7 @@ bool Queue<ElementType>::enqueue(const ElementType& e)
     //add false condition
     
     //inserts node @ end
-    Node* newNode = new Node(e);
+    Node<ElementType>* newNode = new Node<ElementType>(e);
     if(head == NULL)
     {
         // If no elements, insert node at beginning of linked list
@@ -140,7 +139,7 @@ template <class ElementType>
 bool Queue<ElementType>::dequeue()
 {
     //deletes node @ front
-    Node *nodeToDelete = new Node;
+    Node<ElementType> *nodeToDelete = new Node<ElementType>;
     if (head == NULL){
         return false;
     }
@@ -178,7 +177,7 @@ bool Queue<ElementType>::dequeueAll()
         return false;
     }
     while (head != NULL){
-        Node *nodeToDelete = new Node;
+        Node<ElementType> *nodeToDelete = new Node<ElementType>;
         nodeToDelete = head; //Anchor head
         head = head -> next;
         // Not sure if we need this in order to get it to traverse, otherwise it will stop after the first deleted node
@@ -195,11 +194,11 @@ template <class ElementType>
 void Queue<ElementType>::printQueue()
 {
     cout << "****" << endl;
-    Node *current = new Node;
+    Node<ElementType> *current = new Node<ElementType>;
     current = head;
     while (current != NULL) {
-        cout << current -> data << endl;
-        current = current -> next;
+        cout << current->data << endl;
+        current = current->next;
     }
     delete current;
     current = NULL;

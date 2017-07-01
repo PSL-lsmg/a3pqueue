@@ -10,20 +10,30 @@
  */
 
 #pragma once
-#include "Queue.h"
 #include "Event.h"
-#include "Node.cpp"
 
+template <class ElementType>
 class Node {
     
 public:
     // Public data members - Why are the data members public?
-    Event data;     // The data in the node
-    Node* next;       // Pointer to next node
+    ElementType data;     // The data in the node
+    Node<ElementType>* next;       // Pointer to next node
     
     // Constructors
-    Node();
-    Node(Event theData);
-    Node(Event theData, Node* theNextNode);
+    Node()
+    {
+    	next = NULL;
+    }
+    Node(ElementType theData)
+    {
+    	data = theData;
+    	next = NULL;
+    }
+    Node(ElementType theData, Node* theNextNode)
+    {
+    	data = theData;
+    	next = theNextNode;
+    }
     
 }; // end Node
