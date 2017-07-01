@@ -9,7 +9,7 @@
 #include <iostream>
 
 using namespace std;
-#define SIZE 100
+#define SIZE 5
 
 
 template <class ElementType>
@@ -22,6 +22,7 @@ private:
     int numOfEle;
     int front;
     int back;
+    void enqueueBackAtEnd(const ElementType& newElement);
     
 public:
     
@@ -120,20 +121,41 @@ bool PriorityQueue<ElementType>::enqueue(const ElementType& newElement)
     { 
         if(back == SIZE-1) //set back to the beginning of array when it is at the end
         {
-
-
-            back = 0;
+            // int position = front;
+            // //front is always less than back
+            // for(int i = back; i >= front; i--)
+            // {   
+            //     cout << "checking " << newElement.getTime() << endl;
+            //     if(array[i].getTime() > newElement.getTime())   //might need to overload > for Event
+            //     {
+            //         cout << array[i].getTime() << ">" << newElement.getTime() << endl;
+            //         position = i+1;
+            //         break;
+            //     }
+            // }
+            // cout << "Element time: " << newElement.getTime() << " -- " << position << endl;
+            // //shift to the right
+            // back = 0;
+            // array[back] = array[SIZE-1];
+            // for(int j = back; j > position; j--)
+            // {
+            //     array[j] = array[j-1];
+            // }
+            // array[position] = newElement;
+            enqueueBackAtEnd(newElement);
         }
         else
         {
             //find the optimal position to place the new element and shift to right [F>=B]
-            int position = back;
+            int position = front;
             if(front <= back)
             {
                 for(int i = back; i >= front; i--)
                 {   
+                    cout << "checking " << newElement.getTime() << endl;
                     if(array[i].getTime() > newElement.getTime())   //might need to overload > for Event
                     {
+                        cout << array[i].getTime() << ">" << newElement.getTime() << endl;
                         position = i+1;
                         break;
                     }
@@ -145,6 +167,7 @@ bool PriorityQueue<ElementType>::enqueue(const ElementType& newElement)
                     array[j] = array[j-1];
                 }
                 array[position] = newElement;
+                cout << "Element time: " << newElement.getTime() << " -- " << position << endl;
             }
             else
             {
@@ -152,8 +175,10 @@ bool PriorityQueue<ElementType>::enqueue(const ElementType& newElement)
                 bool found = false;
                 for(int i = back; i >= 0; i--)
                 {
+                    cout << "checking " << newElement.getTime() << endl;
                     if(array[i].getTime() > newElement.getTime())
                     {
+                        cout << array[i].getTime() << ">" << newElement.getTime() << endl;
                         position = i+1;
                         found = true;
                         break;
@@ -161,12 +186,22 @@ bool PriorityQueue<ElementType>::enqueue(const ElementType& newElement)
                 }
                 for(int j = SIZE-1; j >= front && found == false; j--)
                 {
-                    if(array[i].getTime() > newElement.getTime())
+                    cout << "checking " << newElement.getTime() << endl;
+                    if(array[j].getTime() > newElement.getTime())
                     {
-                        position = i+1;
+                        cout << array[j].getTime() << ">" << newElement.getTime() << endl;
+                        if(j == SIZE-1)
+                        {
+                            position = 0;
+                        }
+                        else
+                        {
+                            position = j+1;
+                        }
                         break;
                     }
                 }
+                 cout << "Element time: " << newElement.getTime() << " -- " << position << endl;
                 //shift the elements
                 back++;
                 if(position < back)
@@ -247,11 +282,51 @@ void PriorityQueue<ElementType>::printQueue()
     if(front > -1 && back > -1)
     {
         cout << "****" << endl;
-        for(int i = front; i <= back; i++)
+        if(front <= back)
         {
-            cout << array[i] << endl;
+            for(int i = front; i <= back; i++)
+            {
+                cout << array[i] << " -- " << i << endl;
+            }
         }
+        else
+        {
+            for(int i = front; i <= SIZE-1; i++)
+            {
+                cout << array[i] << " -- " << i << endl;
+            }
+            for(int i = 0; i <= back; i++)
+            {
+                cout << array[i] << " -- " << i << endl;
+            }
+        }
+
         cout << "****" << endl;
     }
+}
 
+template <class ElementType>
+void PriorityQueue<ElementType>::enqueueBackAtEnd(const ElementType& newElement)
+{
+    int position = front;
+    //front is always less than back
+    for(int i = back; i >= front; i--)
+    {   
+        cout << "checking " << newElement.getTime() << endl;
+        if(array[i].getTime() > newElement.getTime())   //might need to overload > for Event
+        {
+            cout << array[i].getTime() << ">" << newElement.getTime() << endl;
+            position = i+1;
+            break;
+        }
+    }
+    cout << "Element time: " << newElement.getTime() << " -- " << position << endl;
+    //shift to the right
+    back = 0;
+    array[back] = array[SIZE-1];
+    for(int j = back; j > position; j--)
+    {
+        array[j] = array[j-1];
+    }
+    array[position] = newElement;    
 }
