@@ -20,16 +20,14 @@ private:
     
     // We must complete this section.
     int numOfEle; // Num of elements in Queue
-//    int front;
-//    int back;
     Node<ElementType> *head; // Pointer to first node in queue
     Node<ElementType> *tail; // Pointer to last node in queue
-    //string EmptyDataCollectionException = "Exception: The queue is empty.";
     
 public:
     
     // Let's put our constructor(s) and destructor (if any) ***here***.
     Queue<ElementType>();
+    ~Queue<ElementType>();
     
     /******* Public Interface - START - *******/
     
@@ -65,9 +63,6 @@ public:
     /******* Public Interface - END - *******/
     
     // Let's feel free to add other private helper methods to our Queue class.
-    
-    
-    bool dequeueAll();
     
     void printQueue();
     
@@ -118,11 +113,6 @@ bool Queue<ElementType>::enqueue(const ElementType& e)
     }
     else
     {
-//        Node* current = head; //anchor head
-//        while (current -> next != NULL){
-//            current = current -> next;
-//        }
-//        current -> next = newNode;
         tail -> next = newNode;
     }
     tail = newNode;
@@ -168,26 +158,17 @@ ElementType Queue<ElementType>::peek() const throw (EmptyDataCollectionException
     return head->data;
 }
 
-
 template <class ElementType>
-bool Queue<ElementType>::dequeueAll()
+Queue<ElementType>::~Queue()
 {
-    if(numOfEle == 0)
+    while( head != NULL )
     {
-        return false;
+        Node<ElementType>* toDelete = head;
+        head = head->next;
+        delete toDelete;
     }
-    while (head != NULL){
-        Node<ElementType> *nodeToDelete = new Node<ElementType>;
-        nodeToDelete = head; //Anchor head
-        head = head -> next;
-        // Not sure if we need this in order to get it to traverse, otherwise it will stop after the first deleted node
-//        nodeToDelete -> next = NULL;
-        delete nodeToDelete;
-        nodeToDelete = NULL;
-    }
-    
+    tail = NULL;
     numOfEle = 0;
-    return true;
 }
 
 template <class ElementType>

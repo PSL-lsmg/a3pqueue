@@ -15,90 +15,6 @@ void processDeparture(Event& dEvent, PriorityQueue<Event>& eventPriorityQueue, Q
 
 int main(int argc, char** argv)
 {
-	// cout << "start" << endl;
-	// cout << "****TESTING QUEUE****" << endl;
-	// Event a("A");
-	// a.setTime(5);
-	// a.setLength(5);
-	// cout << a << endl;
-
-	// Event d("D");
-	// d.setTime(a.getTime() + a.getLength());
-
-	// Queue<Event> q;
-	// q.enqueue(a);
-	// q.enqueue(d);
-	// q.printQueue();
-
-	// q.dequeue();
-	// q.printQueue();
-
-	// if(q.isEmpty())
-	// {
-	// 	cout << "Empty" << endl;
-	// }
-	// else
-	// {
-	// 	cout << "Not empty" << endl;
-	// }
-
-	// cout << q.peek() << endl;
-	// cout << "size: " << q.getElementCount() << endl;
-
-	// q.dequeue();
-	// try
-	// {
-	// 	q.peek();
-	// }
-	// catch(EmptyDataCollectionException& e)
-	// {
-	// 	cout << e.what() << endl;
-	// }
-
-	// cout << "****TESTING PRIORITY QUEUE****" << endl;
-	// PriorityQueue<Event> pq;
-	// Event one("A");
-	// one.setTime(1);
-	// Event two("A");
-	// two.setTime(2);
-	// Event three("A");
-	// three.setTime(3);
-	// Event four("A");
-	// four.setTime(4);
-	// Event five("A");
-	// five.setTime(5);
-	// pq.enqueue(one);
-	// pq.enqueue(four);
-	// pq.enqueue(three);
-	// pq.enqueue(two);
-	// pq.printQueue();
-	// pq.dequeue();
-	// pq.dequeue();
-	// pq.dequeue();
-	// pq.printQueue();
-	// pq.enqueue(four);
-	// pq.printQueue();
-	// pq.enqueue(three);
-	// pq.printQueue();
-	// pq.enqueue(two);
-	// pq.printQueue();
-	// pq.enqueue(five);
-	// pq.printQueue();
-	// if(!pq.enqueue(five))
-	// {
-	// 	cout << "failed" << endl;
-	// }
-	// pq.printQueue();
-	// pq.dequeue();
-	// pq.dequeue();
-	// pq.dequeue();
-	// pq.dequeue();
-	// Event leave("D");
-	// leave.setTime(1);
-	// pq.enqueue(leave);
-	// pq.printQueue();
-
-	// cout << "****TESTING BANK PROGRAM****" << endl;
 	cout << "Simulation Begins" << endl;
 	PriorityQueue<Event> eventPriorityQueue;
 	Queue<Event> bankLine;
@@ -138,17 +54,17 @@ int main(int argc, char** argv)
 		//Print
 		if(currentEvent.getType() == "A")
 		{
-			cout << "Processing an arrival event at time:	" << currentTime << endl;
+			cout << "Processing an arrival event at time:" << right << setw(5) << currentTime << endl;
 		}
 		else
 		{
-			cout << "Processing a departure event at time:	" << currentTime << endl;
+			cout << "Processing a departure event at time:" << right << setw(4) << currentTime << endl;
 		}
 	}
 	cout << "Simulation Ends" << endl << endl;
-	cout << "Final Statistics:" << endl;
-	cout << "		Total number of people processed:	" << customerCount << endl;
-	cout << "		Average amount of time spent waiting:	" << setprecision(3) << waitTime/customerCount << endl;
+	cout << "Final Statistics:  " << endl;
+	cout << "	Total number of people processed:  " << customerCount << endl;
+	cout << "	Average amount of time spent waiting: " << setprecision(3) << waitTime/customerCount;
 }
 
 void processArrival(Event& aEvent, PriorityQueue<Event>& eventPriorityQueue, Queue<Event>& bankLine, bool& tellerAvailable)
