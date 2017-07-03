@@ -9,7 +9,7 @@
 #include <iostream>
 
 using namespace std;
-#define SIZE 5
+#define SIZE 100
 
 
 template <class ElementType>
@@ -64,7 +64,6 @@ public:
     /******* Public Interface - END - *******/
     
     // Let's feel free to add other private helper methods to our Priority Queue class.
-    bool dequeueAll();
     
     void printQueue();
     
@@ -169,23 +168,11 @@ bool PriorityQueue<ElementType>::dequeue()
 template <class ElementType>
 ElementType PriorityQueue<ElementType>::peek() const throw(class EmptyDataCollectionException)
 {
-//    if (numOfEle == 0){
-//        throw EmptyDataCollectionException;
-//    }
-    // do we need this if we have the class?
+    if (numOfEle == 0){
+        throw EmptyDataCollectionException("Queue is empty");
+    }
     
     return array[front];
-}
-
-template <class ElementType>
-bool PriorityQueue<ElementType>::dequeueAll()
-{
-    if(numOfEle == 0)
-    {
-        return false;
-    }
-    numOfEle = 0;
-    return true;
 }
 
 template <class ElementType>
@@ -223,7 +210,7 @@ void PriorityQueue<ElementType>::enqueueFrontGEBack(const ElementType& newElemen
     int position = front;
     for(int i = back; i >= front; i--)
     {   
-        if(array[i] > newElement)   //might need to overload > for Event
+        if(array[i] > newElement) 
         {
             position = i+1;
             break;

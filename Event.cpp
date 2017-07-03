@@ -67,3 +67,19 @@ ostream& operator<< (ostream& os, const Event& e)
 	os << e.getType() << "/" << e.getTime() << "/" << e.getLength();
 	return os;
 }
+
+bool Event::operator>(const Event & rhs)
+{
+	if(time < rhs.time)
+	{
+		return true;
+	}
+	else if(time == rhs.time)
+	{
+		if(type == "A")
+		{
+			return true;
+		}
+	}
+	return false;
+}
