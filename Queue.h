@@ -1,17 +1,21 @@
 /*
  * Queue.h
+ * Class Description: A double headed singly linked queue. First in first out.
+ * Class Invariant: Elements are not sorted.
+ *                  First element in, first element out
  *
+ * Created on: June 2017
+ * Last modified on: July 2017
+ * Author: Jason Li, Priscilla (Fae Yein) Lee
  */
 
 #pragma once
-#include <stdexcept>
 #include <string>
 #include "Event.h"
 #include "EmptyDataCollectionException.h"
 #include "Node.h"
 #include <iostream>
 using namespace std;
-
 
 template <class ElementType>
 class Queue {
@@ -64,11 +68,10 @@ public:
     
     // Let's feel free to add other private helper methods to our Queue class.
     
-    void printQueue();
-    
-    
 }; // end Queue
 
+// Default Constructor
+// Description: Create a queue with no element
 template <class ElementType>
 Queue<ElementType>::Queue()
 {
@@ -76,6 +79,21 @@ Queue<ElementType>::Queue()
     head = NULL;
     tail = NULL;
 }
+
+// Destructor
+template <class ElementType>
+Queue<ElementType>::~Queue()
+{
+    while( head != NULL )
+    {
+        Node<ElementType>* toDelete = head;
+        head = head->next;
+        delete toDelete;
+    }
+    tail = NULL;
+    numOfEle = 0;
+}
+
 
 // Description: Returns the number of elements in the Queue.
 // (This method eases testing.)
@@ -156,32 +174,4 @@ ElementType Queue<ElementType>::peek() const throw (EmptyDataCollectionException
         throw EmptyDataCollectionException("Queue is empty");
     }
     return head->data;
-}
-
-template <class ElementType>
-Queue<ElementType>::~Queue()
-{
-    while( head != NULL )
-    {
-        Node<ElementType>* toDelete = head;
-        head = head->next;
-        delete toDelete;
-    }
-    tail = NULL;
-    numOfEle = 0;
-}
-
-template <class ElementType>
-void Queue<ElementType>::printQueue()
-{
-    cout << "****" << endl;
-    Node<ElementType> *current = new Node<ElementType>;
-    current = head;
-    while (current != NULL) {
-        cout << current->data << endl;
-        current = current->next;
-    }
-    delete current;
-    current = NULL;
-    cout << "****" << endl;
 }

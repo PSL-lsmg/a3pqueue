@@ -1,6 +1,14 @@
 /*
  * PriorityQueue.h
- *
+ * 
+ * Class Description: Model a priority queue with high priority element to leave first.
+ *                     It is a circular array based priority queue.
+ * Class Invariant: It is no expandable. Higher priority elements are at the front.
+ *                  Lower priority elements are at the back.
+ * 
+ * Created on: June 2017
+ * Last modified on: July 2017
+ * Author: Jason Li, Priscilla (Fae Yein) Lee
  */
 
 #include "Event.h"
@@ -11,7 +19,6 @@
 using namespace std;
 #define SIZE 100
 
-
 template <class ElementType>
 class PriorityQueue {
     
@@ -19,10 +26,16 @@ private:
     
     // We must complete this section.
     ElementType array[SIZE];
-    int numOfEle;
+    int numOfEle; //element count
     int front;
     int back;
+
+    // Description: enqueue the element when the front is greater/equal to back. Necessary because it is circular
+    // Postcondition: New element is added. Elements are sorted.
     void enqueueFrontGEBack(const ElementType& newElement); //enqueue when front is great/equal to back
+
+    // Description: enqueue when the front is less than back. Necessary because it is circular
+    // Postcondition: New element is added. Elements are sorted.
     void enqueueFrontLTBack(const ElementType& newElement); //enqueue when front is less than back
     
 public:
@@ -65,10 +78,10 @@ public:
     
     // Let's feel free to add other private helper methods to our Priority Queue class.
     
-    void printQueue();
-    
 }; // end PriorityQueue
 
+// Default Constructor
+// Description: Create an empty priority queue
 template <class ElementType>
 PriorityQueue<ElementType>::PriorityQueue()
 {
@@ -110,7 +123,7 @@ bool PriorityQueue<ElementType>::enqueue(const ElementType& newElement)
         return false;
     }
 
-    //initial
+    //initial when queue is empty
     if(front == -1 && back == -1)
     {
         front++;
@@ -119,19 +132,19 @@ bool PriorityQueue<ElementType>::enqueue(const ElementType& newElement)
     }
     else
     { 
-        if(back == SIZE-1)
+        if(back == SIZE-1) //back is at the end of the array
         {
-            enqueueFrontGEBack(newElement);
+            enqueueFrontLTBack(newElement);
         }
-        else
+        else //back is anywhere else other than end of the array
         {
             if(front <= back)
             {
-                enqueueFrontGEBack(newElement);
+                enqueueFrontLTBack(newElement);
             }
             else
             {
-                enqueueFrontLTBack(newElement);
+                enqueueFrontGEBack(newElement);
             }
         }
     }
@@ -175,38 +188,12 @@ ElementType PriorityQueue<ElementType>::peek() const throw(class EmptyDataCollec
     return array[front];
 }
 
+// Description: enqueue the element when the front is less than to back. Necessary because it is circular
+// Postcondition: New element is added. Elements are sorted.
 template <class ElementType>
-void PriorityQueue<ElementType>::printQueue()
+void PriorityQueue<ElementType>::enqueueFrontLTBack(const ElementType& newElement)
 {
-    if(front > -1 && back > -1)
-    {
-        cout << "****" << endl;
-        if(front <= back)
-        {
-            for(int i = front; i <= back; i++)
-            {
-                cout << array[i] << " -- " << i << endl;
-            }
-        }
-        else
-        {
-            for(int i = front; i <= SIZE-1; i++)
-            {
-                cout << array[i] << " -- " << i << endl;
-            }
-            for(int i = 0; i <= back; i++)
-            {
-                cout << array[i] << " -- " << i << endl;
-            }
-        }
-
-        cout << "****" << endl;
-    }
-}
-
-template <class ElementType>
-void PriorityQueue<ElementType>::enqueueFrontGEBack(const ElementType& newElement)
-{
+    //Find the best position for the new element.
     int position = front;
     for(int i = back; i >= front; i--)
     {   
@@ -216,17 +203,17 @@ void PriorityQueue<ElementType>::enqueueFrontGEBack(const ElementType& newElemen
             break;
         }
     }
-    //set new back position depending on where the current back position is
-    if(back == SIZE-1)
+    //Set new the back position depending on where the current back position is
+    if(back == SIZE-1)  //back is at the end of the array
     {
         back = 0;
         array[back] = array[SIZE-1];
     }
-    else
+    else   //back is not at the end of the array
     {
         back++;
     }
-    //shift to the right
+    //shift elements to the right
     for(int j = back; j > position; j--)
     {
         array[j] = array[j-1];
@@ -234,11 +221,15 @@ void PriorityQueue<ElementType>::enqueueFrontGEBack(const ElementType& newElemen
     array[position] = newElement;
 }
 
+// Description: enqueue when the front is greater/equal to back. Necessary because it is circular
+// Postcondition: New element is added. Elements are sorted.
 template <class ElementType>
-void PriorityQueue<ElementType>::enqueueFrontLTBack(const ElementType& newElement)
+void PriorityQueue<ElementType>::enqueueFrontGEBack(const ElementType& newElement)
 {
+    //Find the best position for the new element.
     int position = front;
-    bool found = false;
+    bool found = false; //use to prevent further scanning if position is found in back -> 0
+    //scan from back -> 0
     for(int i = back; i >= 0; i--)
     {
         if(array[i] > newElement)
@@ -248,6 +239,7 @@ void PriorityQueue<ElementType>::enqueueFrontLTBack(const ElementType& newElemen
             break;
         }
     }
+    //scan from end of array -> front
     for(int j = SIZE-1; j >= front && found == false; j--)
     {
         if(array[j] > newElement)
@@ -263,10 +255,11 @@ void PriorityQueue<ElementType>::enqueueFrontLTBack(const ElementType& newElemen
             break;
         }
     }
-    //shift the elements
+    //shift the elements depending on where the position is.
     back++;
     if(position < back)
     {
+        //shift elements in [position, back]
         for(int j = back; j > position; j--)
         {
             array[j] = array[j-1];
@@ -274,6 +267,7 @@ void PriorityQueue<ElementType>::enqueueFrontLTBack(const ElementType& newElemen
     }
     else
     {
+        //shift elements in [0, back] then shift [position, end]
         for(int j = back; j > 0; j--)
         {
             array[j] = array[j-1];
