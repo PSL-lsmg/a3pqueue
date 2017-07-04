@@ -147,7 +147,7 @@ template <class ElementType>
 bool Queue<ElementType>::dequeue()
 {
     //deletes node @ front
-    Node<ElementType> *nodeToDelete = new Node<ElementType>;
+    Node<ElementType> *nodeToDelete;
     if (head == NULL){
         return false;
     }
